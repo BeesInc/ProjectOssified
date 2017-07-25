@@ -24,12 +24,12 @@ function printLocOrigin(LocOrigin) {
 	return finOutput;
 }
 function displayLocOrigin() {
-	var p1Button = "<button onclick = \"";
-	var p2Button ="\">"
-	var closeButton = "</button>"
-	var fTree = p1Button + "harvestTree()" + p2Button + "T" + closeButton;
-	var fFire = p1Button + "stokeFire()" + p2Button + "F" + closeButton;
-	var fDirt = p1Button + "prepDirt()" + p2Button + "D" + closeButton;
+	var p1Object = "<img style = \"height:75px;width:75px\" onclick = \"";
+	var p2Object ="\" src = \"";
+	var EndObject = "\">";
+	var fTree = p1Object + "harvestTree()" + p2Object + "Tree.jpg" + EndObject;
+	var fFire = p1Object + "stokeFire()" + p2Object + "Fire.jpg" + EndObject;
+	var fDirt = p1Object + "prepDirt()" + p2Object + "Dirt.jpg" + EndObject;
 	
 	for (var i = 0; i < 49; i++) {
 		switch(i) {
