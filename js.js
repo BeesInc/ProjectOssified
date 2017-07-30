@@ -1,37 +1,28 @@
-
+var points = 0;
+var picTree = "Tree.jpg";
+var picTreeUse = "TreeUse.jpg";
+var picFire = "Fire.jpg";
+var picDirt = "Dirt.jpg";
 genLocOrigin();
 
 function genLocOrigin() {
 	var LocOrigin = [];
+	var p1Object = "<img style = \"height:75px;width:75px\" onclick = \"";
+	var p2Object ="\" src = ";
+	var EndObject = ">";
+	var fTree = "placeholder";
+	var fFire = "placeholder";
+	var fDirt = "placeholer";
+	
 	for (var i = 0; i < 49; i++) {
 		LocOrigin[i] ="LocOrigin" + i;
 	}
 	document.getElementById("LocOrigin").innerHTML = printLocOrigin(LocOrigin);
 	
-	displayLocOrigin();
-}
-function printLocOrigin(LocOrigin) {
-	var p1Output = "<span id = \"";
-	var p2Output = "\"></span>";
-	var breakLine = "</br>";
-	var finOutput = p1Output + LocOrigin[0] + p2Output;
-	for (var i = 1; i < 49; i++) {
-		finOutput += p1Output + LocOrigin[i] + p2Output;
-		if ((i+1)%7 == 0) {
-			finOutput += breakLine;
-		}
-	}
-	return finOutput;
-}
-function displayLocOrigin() {
-	var p1Object = "<img style = \"height:75px;width:75px\" onclick = \"";
-	var p2Object ="\" src = \"";
-	var EndObject = "\">";
-	var fTree = p1Object + "harvestTree()" + p2Object + "Tree.jpg" + EndObject;
-	var fFire = p1Object + "stokeFire()" + p2Object + "Fire.jpg" + EndObject;
-	var fDirt = p1Object + "prepDirt()" + p2Object + "Dirt.jpg" + EndObject;
-	
 	for (var i = 0; i < 49; i++) {
+		fTree = p1Object + "harvestTree(" + i + ")" + p2Object + picTree + " id = picTree" + i + EndObject;
+		fFire = p1Object + "stokeFire()" + p2Object + picFire + " id = picFire" + i + EndObject;
+		fDirt = p1Object + "prepDirt()" + p2Object + picDirt + " id = picDirt" + i + EndObject;
 		switch(i) {
 			case 24: document.getElementById("LocOrigin"+ i).innerHTML = fFire; break;
 			case 0:
@@ -64,8 +55,21 @@ function displayLocOrigin() {
 		}
 	}
 }
-function harvestTree(){
-	alert("Harvesting");
+function printLocOrigin(LocOrigin) {
+	var p1Output = "<div style = \"display:inline-block\" id = \"";
+	var p2Output = "\"></div>";
+	var breakLine = "</br>";
+	var finOutput = p1Output + LocOrigin[0] + p2Output;
+	for (var i = 1; i < 49; i++) {
+		finOutput += p1Output + LocOrigin[i] + p2Output;
+		if ((i+1)%7 == 0) {
+			finOutput += breakLine;
+		}
+	}
+	return finOutput;
+}
+function harvestTree(i){
+	document.getElementById("picTree" + i).src = picTreeUse;
 }
 function stokeFire() {
 	alert("Stoking");
