@@ -1,8 +1,10 @@
 var points = 0;
 var picTree = "Tree.jpg";
-var picTreeUse = "TreeUse.jpg";
+var picTreeUse = "TreeBright.jpg";
 var picFire = "Fire.jpg";
 var picDirt = "Dirt.jpg";
+var Selected = false;
+var currentSelected = 0;
 genLocOrigin();
 
 function genLocOrigin() {
@@ -56,7 +58,7 @@ function genLocOrigin() {
 	}
 }
 function printLocOrigin(LocOrigin) {
-	var p1Output = "<div style = \"display:inline-block\" id = \"";
+	var p1Output = "<div class=\"LocOrigin\" id = \"";
 	var p2Output = "\"></div>";
 	var breakLine = "</br>";
 	var finOutput = p1Output + LocOrigin[0] + p2Output;
@@ -69,7 +71,20 @@ function printLocOrigin(LocOrigin) {
 	return finOutput;
 }
 function harvestTree(i){
-	document.getElementById("picTree" + i).src = picTreeUse;
+	if (Boolean(Selected)){
+		if (i == currentSelected) {
+			document.getElementById("picTree" + i).src = picTree;
+			document.getElementById("PopUp").style.visibility = "hidden";
+			Selected = false;
+		}
+	}
+	else {
+		document.getElementById("picTree" + i).src = picTreeUse;
+		document.getElementById("PopUp").style.visibility = "visible";
+		document.getElementById("PopUp").innerHTML = "Now viewing Tree #" + (i+1) + "'s stats";
+		Selected = true;
+		currentSelected = i;
+	}
 }
 function stokeFire() {
 	alert("Stoking");

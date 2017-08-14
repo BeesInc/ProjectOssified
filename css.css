@@ -1,0 +1,26 @@
+div.LocOrigin {
+	display:inline-block;
+	float:left;
+}
+
+#Wrapper {
+	 width: 1070px;
+     margin: 0 auto;
+     padding: 0;
+     overflow: auto;
+}
+div.LocOriginBig {
+	 width: 525px;
+     padding: 0;
+     margin: 0;
+     position: fixed;
+}
+#PopUp {
+	 width: 525px;
+	 height: 550px; 
+     background-color: #C0C0C0;
+     display: block;
+     float: right;
+     border: 1px solid grey;
+	 visibility:hidden;
+}
