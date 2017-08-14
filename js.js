@@ -1,8 +1,10 @@
 var points = 0;
 var picTree = "Tree.jpg";
-var picTreeUse = "TreeBright.jpg";
+var picTreeSelect = "TreeBright.jpg";
 var picFire = "Fire.jpg";
+var picFireSelect = "FireBright.jpg";
 var picDirt = "Dirt.jpg";
+var picDirtSelect = "DirtBright.jpg";
 var Selected = false;
 var currentSelected = 0;
 genLocOrigin();
@@ -22,9 +24,9 @@ function genLocOrigin() {
 	document.getElementById("LocOrigin").innerHTML = printLocOrigin(LocOrigin);
 	
 	for (var i = 0; i < 49; i++) {
-		fTree = p1Object + "harvestTree(" + i + ")" + p2Object + picTree + " id = picTree" + i + EndObject;
-		fFire = p1Object + "stokeFire()" + p2Object + picFire + " id = picFire" + i + EndObject;
-		fDirt = p1Object + "prepDirt()" + p2Object + picDirt + " id = picDirt" + i + EndObject;
+		fTree = p1Object + "selectTile(" + i + ",\'Tree\')" + p2Object + picTree + " id = picTree" + i + EndObject;
+		fFire = p1Object + "selectTile(" + i + ", \'Fire\')" + p2Object + picFire + " id = picFire" + i + EndObject;
+		fDirt = p1Object + "selectTile(" + i + ", \'Dirt\')" + p2Object + picDirt + " id = picDirt" + i + EndObject;
 		switch(i) {
 			case 24: document.getElementById("LocOrigin"+ i).innerHTML = fFire; break;
 			case 0:
@@ -70,18 +72,27 @@ function printLocOrigin(LocOrigin) {
 	}
 	return finOutput;
 }
-function harvestTree(i){
+function selectTile(i, State){
 	if (Boolean(Selected)){
 		if (i == currentSelected) {
-			document.getElementById("picTree" + i).src = picTree;
+			switch(State) {
+				case "Tree": document.getElementById("picTree" + i).src = picTree; break;
+				case "Fire": document.getElementById("picFire" + i).src = picFire; break;
+				case "Dirt": document.getElementById("picDirt" + i).src = picDirt; break;
+			}
 			document.getElementById("PopUp").style.visibility = "hidden";
 			Selected = false;
 		}
 	}
 	else {
-		document.getElementById("picTree" + i).src = picTreeUse;
+		switch(State) {
+			case "Tree": document.getElementById("picTree" + i).src = picTreeSelect; break;
+			case "Fire": document.getElementById("picFire" + i).src = picFireSelect; break;
+			case "Dirt": document.getElementById("picDirt" + i).src = picDirtSelect; break;
+		}
 		document.getElementById("PopUp").style.visibility = "visible";
-		document.getElementById("PopUp").innerHTML = "Now viewing Tree #" + (i+1) + "'s stats";
+		document.getElementById("PopUpTitle").innerHTML = "Now viewing Tile #" + (i+1) + "'s stats";
+		document.getElementById("TileState").innerHTML = State;
 		Selected = true;
 		currentSelected = i;
 	}
