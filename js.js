@@ -5,8 +5,17 @@ var picFire = "Fire.jpg";
 var picFireSelect = "FireBright.jpg";
 var picDirt = "Dirt.jpg";
 var picDirtSelect = "DirtBright.jpg";
-var Selected = false;
-var currentSelected = 0;
+var pSelect = 0;
+var pState = "";
+var tile = {};
+for (var i = 0; i < 49; i++) {
+	tile["State" + i] = "";
+	tile["Energy" + i] = 0;
+	tile["Fertility" + i] = "";
+	tile["Output" + i] = "";
+	tile["Time" + i] = 0;
+}
+
 genLocOrigin();
 
 function genLocOrigin() {
@@ -24,11 +33,19 @@ function genLocOrigin() {
 	document.getElementById("LocOrigin").innerHTML = printLocOrigin(LocOrigin);
 	
 	for (var i = 0; i < 49; i++) {
-		fTree = p1Object + "selectTile(" + i + ",\'Tree\')" + p2Object + picTree + " id = picTree" + i + EndObject;
-		fFire = p1Object + "selectTile(" + i + ", \'Fire\')" + p2Object + picFire + " id = picFire" + i + EndObject;
-		fDirt = p1Object + "selectTile(" + i + ", \'Dirt\')" + p2Object + picDirt + " id = picDirt" + i + EndObject;
+		fTree = p1Object + "selectTile(" + i + ")" + p2Object + picTree + " id = picTree" + i + EndObject;
+		fFire = p1Object + "selectTile(" + i + ")" + p2Object + picFire + " id = picFire" + i + EndObject;
+		fDirt = p1Object + "selectTile(" + i + ")" + p2Object + picDirt + " id = picDirt" + i + EndObject;
 		switch(i) {
-			case 24: document.getElementById("LocOrigin"+ i).innerHTML = fFire; break;
+			case 24: {
+				document.getElementById("LocOrigin"+ i).innerHTML = fFire;
+				tile.State24 = "Fire";
+				tile.Energy24 = "Not required";
+				tile.Fertility24 = "Ignited";
+				tile.Output24 = "1 Spark";
+				tile.Time24 = "1 Second";
+				break;
+			}
 			case 0:
 			case 1:
 			case 2:
@@ -54,8 +71,22 @@ function genLocOrigin() {
 			case 45:
 			case 46:
 			case 47:
-			case 48: document.getElementById("LocOrigin" + i).innerHTML = fTree; break;
-			default: document.getElementById("LocOrigin" + i).innerHTML = fDirt; break;
+			case 48: {
+				document.getElementById("LocOrigin" + i).innerHTML = fTree;
+				tile["State" + i] = "Tree";
+				tile["Fertility" + i] = "Lush";
+				tile["Output" + i] = "5 logs & 10 sticks";
+				tile["Time" + i] = "60 Seconds at 1 Energy";
+				break;
+			}
+			default: {
+				document.getElementById("LocOrigin" + i).innerHTML = fDirt;
+				tile["State" + i] = "Dirt";
+				tile["Fertility" + i] = "Rocky";
+				tile["Output" + i] = "5 soil & 3 pebbles";
+				tile["Time" + i] = "60 Seconds at 1 Energy";
+				break;
+			}
 		}
 	}
 }
@@ -72,34 +103,24 @@ function printLocOrigin(LocOrigin) {
 	}
 	return finOutput;
 }
-function selectTile(i, State){
-	if (Boolean(Selected)){
-		if (i == currentSelected) {
-			switch(State) {
-				case "Tree": document.getElementById("picTree" + i).src = picTree; break;
-				case "Fire": document.getElementById("picFire" + i).src = picFire; break;
-				case "Dirt": document.getElementById("picDirt" + i).src = picDirt; break;
-			}
-			document.getElementById("PopUp").style.visibility = "hidden";
-			Selected = false;
-		}
+function selectTile(i) {
+	switch(tile["State" + i]) {
+		case "Tree": document.getElementById("picTree" + i).src = picTreeSelect; break;
+		case "Fire": document.getElementById("picFire" + i).src = picFireSelect; break;
+		case "Dirt": document.getElementById("picDirt" + i).src = picDirtSelect; break;
 	}
-	else {
-		switch(State) {
-			case "Tree": document.getElementById("picTree" + i).src = picTreeSelect; break;
-			case "Fire": document.getElementById("picFire" + i).src = picFireSelect; break;
-			case "Dirt": document.getElementById("picDirt" + i).src = picDirtSelect; break;
-		}
-		document.getElementById("PopUp").style.visibility = "visible";
-		document.getElementById("PopUpTitle").innerHTML = "Now viewing Tile #" + (i+1) + "'s stats";
-		document.getElementById("TileState").innerHTML = State;
-		Selected = true;
-		currentSelected = i;
+	document.getElementById("PopUp").style.visibility = "visible";
+	document.getElementById("PopUpTitle").innerHTML = "Now viewing Tile #" + (i+1) + "'s stats";
+	document.getElementById("TileState").innerHTML = tile["State" + i];
+	document.getElementById("TileEnergy").innerHTML = tile["Energy" + i];
+	document.getElementById("TileFertility").innerHTML = tile["Fertility" + i];
+	document.getElementById("TileOutput").innerHTML = tile["Output" + i];
+	document.getElementById("TileTime").innerHTML = tile["Time" + i];
+	switch(pState) {
+		case "Tree": document.getElementById("picTree" + pSelect).src = picTree; break;
+		case "Fire": document.getElementById("picFire" + pSelect).src = picFire; break;
+		case "Dirt": document.getElementById("picDirt" + pSelect).src = picDirt; break;
 	}
-}
-function stokeFire() {
-	alert("Stoking");
-}
-function prepDirt() {
-	alert("Preparing");
+	pSelect = i;
+	pState = tile["State" + i];
 }
