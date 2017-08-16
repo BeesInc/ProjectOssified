@@ -1,21 +1,18 @@
-var points = 0;
 var picTree = "Tree.jpg";
 var picTreeSelect = "TreeBright.jpg";
 var picFire = "Fire.jpg";
 var picFireSelect = "FireBright.jpg";
 var picDirt = "Dirt.jpg";
 var picDirtSelect = "DirtBright.jpg";
-var pSelect = 0;
-var pState = "";
-var tile = {};
-for (var i = 0; i < 49; i++) {
-	tile["State" + i] = "";
-	tile["Energy" + i] = 0;
-	tile["Fertility" + i] = "";
-	tile["Output" + i] = "";
-	tile["Time" + i] = 0;
-}
+var cTile = 1000;
 
+var pSelect = 1000;
+var pState = "";
+
+var EnergyNum = []; //Energy Number Object
+var tile = {};
+
+getObjectLiteral();
 genLocOrigin();
 
 function genLocOrigin() {
@@ -25,7 +22,8 @@ function genLocOrigin() {
 	var EndObject = ">";
 	var fTree = "placeholder";
 	var fFire = "placeholder";
-	var fDirt = "placeholer";
+	var fDirt = "placeholder";
+	var fRoman = "placeholder";
 	
 	for (var i = 0; i < 49; i++) {
 		LocOrigin[i] ="LocOrigin" + i;
@@ -33,17 +31,15 @@ function genLocOrigin() {
 	document.getElementById("LocOrigin").innerHTML = printLocOrigin(LocOrigin);
 	
 	for (var i = 0; i < 49; i++) {
-		fTree = p1Object + "selectTile(" + i + ")" + p2Object + picTree + " id = picTree" + i + EndObject;
-		fFire = p1Object + "selectTile(" + i + ")" + p2Object + picFire + " id = picFire" + i + EndObject;
-		fDirt = p1Object + "selectTile(" + i + ")" + p2Object + picDirt + " id = picDirt" + i + EndObject;
+		fTree = p1Object + "selectTile(" + i + ", 'new')" + p2Object + picTree + " id = picTree" + i + EndObject;
+		fFire = p1Object + "selectTile(" + i + ", 'new')" + p2Object + picFire + " id = picFire" + i + EndObject;
+		fDirt = p1Object + "selectTile(" + i + ", 'new')" + p2Object + picDirt + " id = picDirt" + i + EndObject;
+		fRoman = "<img src = " + EnergyNum[0] + " class = 'Roman0' id =" + i + "Roman>";
 		switch(i) {
 			case 24: {
-				document.getElementById("LocOrigin"+ i).innerHTML = fFire;
+				document.getElementById("LocOrigin"+ i).innerHTML = fFire + fRoman;
 				tile.State24 = "Fire";
-				tile.Energy24 = "Not required";
 				tile.Fertility24 = "Ignited";
-				tile.Output24 = "1 Spark";
-				tile.Time24 = "1 Second";
 				break;
 			}
 			case 0:
@@ -72,19 +68,15 @@ function genLocOrigin() {
 			case 46:
 			case 47:
 			case 48: {
-				document.getElementById("LocOrigin" + i).innerHTML = fTree;
+				document.getElementById("LocOrigin" + i).innerHTML = fTree + fRoman;
 				tile["State" + i] = "Tree";
 				tile["Fertility" + i] = "Lush";
-				tile["Output" + i] = "5 logs & 10 sticks";
-				tile["Time" + i] = "60 Seconds at 1 Energy";
 				break;
 			}
 			default: {
-				document.getElementById("LocOrigin" + i).innerHTML = fDirt;
+				document.getElementById("LocOrigin" + i).innerHTML = fDirt + fRoman;
 				tile["State" + i] = "Dirt";
 				tile["Fertility" + i] = "Rocky";
-				tile["Output" + i] = "5 soil & 3 pebbles";
-				tile["Time" + i] = "60 Seconds at 1 Energy";
 				break;
 			}
 		}
@@ -103,7 +95,8 @@ function printLocOrigin(LocOrigin) {
 	}
 	return finOutput;
 }
-function selectTile(i) {
+function selectTile(i, choice) {
+	cTile = i;
 	switch(tile["State" + i]) {
 		case "Tree": document.getElementById("picTree" + i).src = picTreeSelect; break;
 		case "Fire": document.getElementById("picFire" + i).src = picFireSelect; break;
@@ -114,13 +107,57 @@ function selectTile(i) {
 	document.getElementById("TileState").innerHTML = tile["State" + i];
 	document.getElementById("TileEnergy").innerHTML = tile["Energy" + i];
 	document.getElementById("TileFertility").innerHTML = tile["Fertility" + i];
-	document.getElementById("TileOutput").innerHTML = tile["Output" + i];
-	document.getElementById("TileTime").innerHTML = tile["Time" + i];
-	switch(pState) {
-		case "Tree": document.getElementById("picTree" + pSelect).src = picTree; break;
-		case "Fire": document.getElementById("picFire" + pSelect).src = picFire; break;
-		case "Dirt": document.getElementById("picDirt" + pSelect).src = picDirt; break;
+	switch(tile["Energy" + i]) {
+		case 10: {
+			document.getElementById("EnergyAButton").innerHTML = "<button onclick = \"alert('Maximum Energy')\"> Max Energy </button>"; 
+			document.getElementById("EnergyRButton").innerHTML = "<button onclick = \"modEnergy('r')\"> Remove Energy </button>";
+			break;
+		}
+		case 0: {
+			document.getElementById("EnergyRButton").innerHTML = "<button onclick = \"alert('Cannot Remove Energy')\"> No Energy </button>"; 
+			document.getElementById("EnergyAButton").innerHTML = "<button onclick = \"modEnergy('a')\"> Add Energy </button>";
+			break;
+		}
+		default: {
+			document.getElementById("EnergyAButton").innerHTML = "<button onclick = \"modEnergy('a')\"> Add Energy </button>";
+			document.getElementById("EnergyRButton").innerHTML = "<button onclick = \"modEnergy('r')\"> Remove Energy </button>";
+			break;
+		}
+	}
+	if (choice == "new") {
+		switch(pState) {
+			case "Tree": document.getElementById("picTree" + pSelect).src = picTree; break;
+			case "Fire": document.getElementById("picFire" + pSelect).src = picFire; break;
+			case "Dirt": document.getElementById("picDirt" + pSelect).src = picDirt; break;
+		}
 	}
 	pSelect = i;
 	pState = tile["State" + i];
+}
+function getObjectLiteral() {
+	for (var i = 0; i < 11; i++) {
+		EnergyNum[i] = "Roman" + (i) + ".png"
+	}
+	for (var i = 0; i < 49; i++) {
+		tile["State" + i] = "";
+		tile["Energy" + i] = 0;
+		tile["Fertility" + i] = "";
+	}
+}
+function modEnergy(choice) {
+	switch(choice) {
+		case "a": {
+			document.getElementById(cTile + "Roman").src = EnergyNum[tile["Energy" + cTile] + 1];
+			document.getElementById(cTile + "Roman").className = "Roman" + (tile["Energy" + cTile]+1);
+			tile["Energy" + cTile]++;
+			break;
+		}
+		case "r": {
+			document.getElementById(cTile + "Roman").src = EnergyNum[tile["Energy" + cTile] - 1];
+			document.getElementById(cTile + "Roman").className = "Roman" + (tile["Energy" + cTile]-1);
+			tile["Energy" + cTile]--; 
+			break; 
+		}
+	}
+	selectTile(cTile, "");
 }

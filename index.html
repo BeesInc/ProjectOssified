@@ -4,40 +4,46 @@
 		Project Ossified
 	</title>
 	<head>
-		<span id = "Data">Data</span>
 	</head>
 	<body>
 	<link rel="stylesheet" type="text/css" href="css.css">
 	<script type="text/javascript" src="js.js"></script>
-	<div id="Wrapper">
-		<div class = "LocOriginBig" id = "LocOrigin"></div>
-		<div id = "PopUp">
-			<p id = "PopUpTitle"> null </p>
-			<table>
-				<tr>
-					<td> State </td>
-					<td id = "TileState"> null </td>
-				</tr>
-				<tr>
-					<td> Energy: </td>
-					<td id = "TileEnergy"> null </td>
-					<td> <button> Add Energy </button> </td>
-				</tr>
-				<tr>
-					<td> Fertility: </td>
-					<td id = "TileFertility"> null </td>
-				</tr>
-				<tr>
-					<td> Output: </td>
-					<td id = "TileOutput"> null </td>
-				</tr>
-				<tr>
-					<td> Job Time Remaining: </td>
-					<td id = "TileTime"> null</td>
-				</tr>
-			</table>
-		</div>
-	</div>	
+		<table id = "Data">
+			<tr>
+				<td> Sparks: </td>
+				<td> null </td>
+				<td> Energy Free: </td>
+				<td> null </td>
+			</tr>
+			<tr>
+				<td> Heat: </td>
+				<td><span> null</span>°F </td>
+				<td> Energy In-Use: </td>
+				<td> null </td>
+			</tr>
+		</table>
+		<div id="Wrapper">
+			<div class = "LocOriginBig" id = "LocOrigin"></div>
+			<div id = "PopUp">
+				<p id = "PopUpTitle"> null </p>
+				<table>
+					<tr>
+						<td> State </td>
+						<td id = "TileState"> null </td>
+					</tr>
+					<tr>
+						<td> Energy: </td>
+						<td id = "TileEnergy"> null </td>
+						<td id = "EnergyAButton"> null </td>
+						<td id = "EnergyRButton"> null </td>
+					</tr>
+					<tr>
+						<td> Fertility: </td>
+						<td id = "TileFertility"> null </td>
+					</tr>
+				</table>
+			</div>
+		</div>	
 	<script type="text/javascript" src="js.js"></script>
 	</body>
 </html>
