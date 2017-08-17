@@ -9,12 +9,13 @@ var cTile = 1000;
 var pSelect = 1000;
 var pState = "";
 
-var EnergyNum = []; //Energy Number Object
+var EnergyNum = [];
 var tile = {};
+var resource = {Spark: 0, Heat: 0, EnergyF: 1, EnergyU: 0};
 
 getObjectLiteral();
 genLocOrigin();
-
+updateData();
 function genLocOrigin() {
 	var LocOrigin = [];
 	var p1Object = "<img style = \"height:75px;width:75px\" onclick = \"";
@@ -147,17 +148,37 @@ function getObjectLiteral() {
 function modEnergy(choice) {
 	switch(choice) {
 		case "a": {
-			document.getElementById(cTile + "Roman").src = EnergyNum[tile["Energy" + cTile] + 1];
-			document.getElementById(cTile + "Roman").className = "Roman" + (tile["Energy" + cTile]+1);
-			tile["Energy" + cTile]++;
+			if (resource.EnergyF > 0) {
+				document.getElementById(cTile + "Roman").src = EnergyNum[tile["Energy" + cTile] + 1];
+				document.getElementById(cTile + "Roman").className = "Roman" + (tile["Energy" + cTile]+1);
+				tile["Energy" + cTile]++;
+				resource.EnergyF--;
+				resource.EnergyU++;
+			}
+			else {
+				alert("All energy is already in use");
+			}
 			break;
 		}
 		case "r": {
 			document.getElementById(cTile + "Roman").src = EnergyNum[tile["Energy" + cTile] - 1];
 			document.getElementById(cTile + "Roman").className = "Roman" + (tile["Energy" + cTile]-1);
-			tile["Energy" + cTile]--; 
+			tile["Energy" + cTile]--;
+			resource.EnergyF++;
+			resource.EnergyU--;
 			break; 
 		}
 	}
 	selectTile(cTile, "");
+	updateData();
+}
+function updateData() {
+	document.getElementById("SparkNum").innerHTML = resource.Spark;
+	document.getElementById("HeatNum").innerHTML = resource.Heat;
+	document.getElementById("EnergyFNum").innerHTML = resource.EnergyF;
+	document.getElementById("EnergyUNum").innerHTML = resource.EnergyU;
+}
+function tickGame() {
+	
+	setTimeout(tickGame,1000);
 }

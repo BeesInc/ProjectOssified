@@ -36,6 +36,12 @@ div.LocOriginBig {
      border: 1px solid grey;
 	 visibility:hidden;
 }
+button#j {
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+
+}
 .Roman0 {
 	z-index: 3;
 	visibility: visible;
