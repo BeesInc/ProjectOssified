@@ -1,21 +1,31 @@
-var picTree = "Tree.jpg";
-var picTreeSelect = "TreeBright.jpg";
-var picFire = "Fire.jpg";
-var picFireSelect = "FireBright.jpg";
-var picDirt = "Dirt.jpg";
-var picDirtSelect = "DirtBright.jpg";
+var tileAgain = false;
 var cTile = 1000;
-
 var pSelect = 1000;
 var pState = "";
 
 var EnergyNum = [];
 var tile = {};
-var resource = {Spark: 0, Heat: 0, EnergyF: 1, EnergyU: 0};
+var pic = {
+	Tree: "Tree.jpg",
+	TreeS: "TreeBright.jpg",
+	Fire: "Fire.jpg",
+	FireS: "FireBright.jpg",
+	Dirt: "Dirt.jpg",
+	DirtS: "DirtBright.jpg"
+};
+var resource = {Spark: 0, Heat: 0, EnergyF: 1, EnergyU: 0, Twig: 0, Log: 0, Charcoal: 0};
+var burnTime = {Twig: 60, Log: 240, Charcoal: 480};
+var minEnergy = {Twig: 1, Log: 4, Charcoal: 8};
+var sparkOutput = {Twig: 10, Log: 80, Charcoal: 200};
+var byProduct = {Default: "Ash", Twig: "null", Log: "Charcoal", Charcoal: "null"};
 
-getObjectLiteral();
+setupObjectLiteral();
 genLocOrigin();
 updateData();
+function tickGame() {
+	
+	setTimeout(tickGame,1000);
+}
 function genLocOrigin() {
 	var LocOrigin = [];
 	var p1Object = "<img style = \"height:75px;width:75px\" onclick = \"";
@@ -32,9 +42,9 @@ function genLocOrigin() {
 	document.getElementById("LocOrigin").innerHTML = printLocOrigin(LocOrigin);
 	
 	for (var i = 0; i < 49; i++) {
-		fTree = p1Object + "selectTile(" + i + ", 'new')" + p2Object + picTree + " id = picTree" + i + EndObject;
-		fFire = p1Object + "selectTile(" + i + ", 'new')" + p2Object + picFire + " id = picFire" + i + EndObject;
-		fDirt = p1Object + "selectTile(" + i + ", 'new')" + p2Object + picDirt + " id = picDirt" + i + EndObject;
+		fTree = p1Object + "selectTile(" + i + ", 'new')" + p2Object + pic.Tree + " id = picTree" + i + EndObject;
+		fFire = p1Object + "selectTile(" + i + ", 'new')" + p2Object + pic.Fire + " id = picFire" + i + EndObject;
+		fDirt = p1Object + "selectTile(" + i + ", 'new')" + p2Object + pic.Dirt + " id = picDirt" + i + EndObject;
 		fRoman = "<img src = " + EnergyNum[0] + " class = 'Roman0' id =" + i + "Roman>";
 		switch(i) {
 			case 24: {
@@ -96,19 +106,20 @@ function printLocOrigin(LocOrigin) {
 	}
 	return finOutput;
 }
-function selectTile(i, choice) {
-	cTile = i;
-	switch(tile["State" + i]) {
-		case "Tree": document.getElementById("picTree" + i).src = picTreeSelect; break;
-		case "Fire": document.getElementById("picFire" + i).src = picFireSelect; break;
-		case "Dirt": document.getElementById("picDirt" + i).src = picDirtSelect; break;
+function selectTile(tileNum, choice) {
+	cTile = tileNum;
+	genJobs();
+	switch(tile["State" + tileNum]) {
+		case "Tree": document.getElementById("picTree" + tileNum).src = pic.TreeS; break;
+		case "Fire": document.getElementById("picFire" + tileNum).src = pic.FireS; break;
+		case "Dirt": document.getElementById("picDirt" + tileNum).src = pic.DirtS; break;
 	}
 	document.getElementById("PopUp").style.visibility = "visible";
-	document.getElementById("PopUpTitle").innerHTML = "Now viewing Tile #" + (i+1) + "'s stats";
-	document.getElementById("TileState").innerHTML = tile["State" + i];
-	document.getElementById("TileEnergy").innerHTML = tile["Energy" + i];
-	document.getElementById("TileFertility").innerHTML = tile["Fertility" + i];
-	switch(tile["Energy" + i]) {
+	document.getElementById("PopUpTitle").innerHTML = "Now viewing Tile #" + (tileNum+1) + "'s stats";
+	document.getElementById("TileState").innerHTML = tile["State" + tileNum];
+	document.getElementById("TileEnergy").innerHTML = tile["Energy" + tileNum];
+	document.getElementById("TileFertility").innerHTML = tile["Fertility" + tileNum];
+	switch(tile["Energy" + tileNum]) {
 		case 10: {
 			document.getElementById("EnergyAButton").innerHTML = "<button onclick = \"alert('Maximum Energy')\"> Max Energy </button>"; 
 			document.getElementById("EnergyRButton").innerHTML = "<button onclick = \"modEnergy('r')\"> Remove Energy </button>";
@@ -127,15 +138,29 @@ function selectTile(i, choice) {
 	}
 	if (choice == "new") {
 		switch(pState) {
-			case "Tree": document.getElementById("picTree" + pSelect).src = picTree; break;
-			case "Fire": document.getElementById("picFire" + pSelect).src = picFire; break;
-			case "Dirt": document.getElementById("picDirt" + pSelect).src = picDirt; break;
+			case "Tree": document.getElementById("picTree" + pSelect).src = pic.Tree; break;
+			case "Fire": document.getElementById("picFire" + pSelect).src = pic.Fire; break;
+			case "Dirt": document.getElementById("picDirt" + pSelect).src = pic.Dirt; break;
 		}
 	}
-	pSelect = i;
-	pState = tile["State" + i];
+	if (pSelect == tileNum && choice != "update") {
+		if (!tileAgain) {
+			document.getElementById("PopUp").style.visibility = "hidden";
+			tileAgain = true;
+		}
+		else {
+			switch(tile["State" + tileNum]) {
+				case "Tree": document.getElementById("picTree" + tileNum).src = pic.TreeS; break;
+				case "Fire": document.getElementById("picFire" + tileNum).src = pic.FireS; break;
+				case "Dirt": document.getElementById("picDirt" + tileNum).src = pic.DirtS; break;
+			}
+			tileAgain = false;
+		}
+	}
+	pSelect = tileNum;
+	pState = tile["State" + tileNum];
 }
-function getObjectLiteral() {
+function setupObjectLiteral() {
 	for (var i = 0; i < 11; i++) {
 		EnergyNum[i] = "Roman" + (i) + ".png"
 	}
@@ -169,7 +194,7 @@ function modEnergy(choice) {
 			break; 
 		}
 	}
-	selectTile(cTile, "");
+	selectTile(cTile, "update");
 	updateData();
 }
 function updateData() {
@@ -178,7 +203,24 @@ function updateData() {
 	document.getElementById("EnergyFNum").innerHTML = resource.EnergyF;
 	document.getElementById("EnergyUNum").innerHTML = resource.EnergyU;
 }
-function tickGame() {
-	
-	setTimeout(tickGame,1000);
+function genJobs() {
+	var job1 = "";
+	var job2 = "";
+	var header = "<tr class = 'Jobs'><th> Name </th><th> Input </th><th> Time </th><th> Min Energy </th><th> Output </th><th> By-Product </th></tr>";
+	switch(tile["State" + cTile]) {
+		case "Fire": {
+			job1 = "<tr class = 'Jobs' onclick = \"alert('Stoking Fire')\"><td> Stoke Fire </td><td> N/A </td><td> 1 Second </td><td> 1 Energy </td><td> 5°F/Energy </td><td> Heat Vis = .1% </td></tr>";
+			job2 = "<tr class = 'Jobs' onclick = \"alert('Burning Fuel')\"><td> Burn Fuel </td><td> Choosen </td><td> Dependent </td><td> Dependent </td><td> Dependent </td><td> Dependent </td></tr>";
+			break;
+		}
+		case "Tree": {
+			
+			break;
+		}
+		case "Dirt": {
+			
+			break;
+		}
+	}
+	document.getElementById("Jobs").innerHTML = header + job1 + job2;
 }

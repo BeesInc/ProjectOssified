@@ -1,5 +1,25 @@
 /* # is id, . is class */
-
+#Wrapper {
+	 width: 1070px;
+     margin: 0 auto;
+     padding: 0;
+     overflow: auto;
+}
+div.LocOriginBig {
+	 width: 525px;
+     padding: 0;
+     margin: 0;
+	 position: fixed;
+}
+#PopUp {
+	 width: 525px;
+	 height: 525px; 
+     background-color: #C0C0C0;
+     display: block;
+     float: right;
+     border: 1px solid grey;
+	 visibility:hidden;
+}
 div.LocOrigin {
 	display:inline-block;
 	float:left;
@@ -15,33 +35,19 @@ div.LocOrigin {
 	left: 50%;
 	transform: translate(-50%);
 }
-#Wrapper {
-	 width: 1070px;
-     margin: 0 auto;
-     padding: 0;
-     overflow: auto;
+h3 {
+	text-align: center;
 }
-div.LocOriginBig {
-	 width: 525px;
-     padding: 0;
-     margin: 0;
-     position: fixed;
+th.Jobs, tr.Jobs {
+	border-bottom:4px solid gold;
 }
-#PopUp {
-	 width: 525px;
-	 height: 550px; 
-     background-color: #C0C0C0;
-     display: block;
-     float: right;
-     border: 1px solid grey;
-	 visibility:hidden;
+tr.Jobs:hover{background-color:#d6d6cf}
+table.Jobs {
+	text-align: center;
+	width: 100%;
+	border-collapse: collapse;
 }
-button#j {
-	position: relative;
-	left: 50%;
-	transform: translate(-50%);
 
-}
 .Roman0 {
 	z-index: 3;
 	visibility: visible;
